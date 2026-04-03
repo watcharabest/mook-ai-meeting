@@ -25,7 +25,8 @@ class JobStartRequest(BaseModel):
 
 class JobCreateResponse(BaseModel):
     id: str
-    upload_url: str       # Supabase Storage signed upload URL
+    upload_url: str       # Supabase Storage signed upload URL (legacy)
+    upload_token: str     # JWT token for uploadToSignedUrl
     storage_path: str     # the storage path in Supabase
 
 

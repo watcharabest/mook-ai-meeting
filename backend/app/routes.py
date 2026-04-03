@@ -40,7 +40,7 @@ def create_job(
     storage_path = f"{user_id}/{job_id}/{body.audio_filename}"
 
     # Generate signed upload URL
-    upload_url = generate_upload_url(storage_path=storage_path)
+    upload_result = generate_upload_url(storage_path=storage_path)
 
     # Insert job record into Supabase
     db = get_supabase()
@@ -71,7 +71,8 @@ def create_job(
 
     return JobCreateResponse(
         id=job_id,
-        upload_url=upload_url,
+        upload_url=upload_result["signed_url"],
+        upload_token=upload_result["token"],
         storage_path=storage_path,
     )
 

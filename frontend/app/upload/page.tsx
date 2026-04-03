@@ -6,6 +6,7 @@ import { TopNavBar } from "@/app/components/TopNavBar";
 import { Footer } from "@/app/components/Footer";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { createJob, startJob } from "@/app/lib/api";
+import { supabase } from "@/app/lib/supabase";
 
 const ACCEPTED_TYPES = [
   "audio/mpeg",
@@ -95,20 +96,23 @@ export default function UploadPage() {
         token
       );
 
-      // Step 2: Upload directly to Supabase Storage
+      // Step 2: Upload directly to Supabase Storage using SDK
       setUploadStep("Uploading audio...");
       setUploadProgress(30);
 
-      const uploadRes = await fetch(jobResponse.upload_url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": contentType,
-        },
-        body: file,
-      });
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("audio-files")
+        .uploadToSignedUrl(
+          jobResponse.storage_path,
+          jobResponse.upload_token,
+          file,
+          {
+            upsert: true,
+          }
+        );
 
-      if (!uploadRes.ok) {
-        throw new Error(`Upload failed: ${uploadRes.statusText}`);
+      if (uploadError) {
+        throw new Error(`Upload failed: ${uploadError.message}`);
       }
 
       setUploadProgress(80);

@@ -44,6 +44,7 @@ export interface CreateJobPayload {
 export interface CreateJobResponse {
   id: string;
   upload_url: string;
+  upload_token: string;
   storage_path: string;
 }
 
