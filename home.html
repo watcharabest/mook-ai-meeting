@@ -1,0 +1,1190 @@
+<!doctype html>
+<html class="light" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Curator AI | Editorial Intelligence</title>
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossorigin=""
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@200;400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Material Symbols -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <script id="tailwind-config">
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            "tertiary-fixed": "#d1e4fe",
+                            "primary-fixed": "#c6e9e9",
+                            "tertiary-fixed-dim": "#c3d6ef",
+                            "surface-container-lowest": "#ffffff",
+                            "on-primary": "#dbfffe",
+                            "on-tertiary": "#f7f9ff",
+                            "surface-container-high": "#e3e9ec",
+                            "on-tertiary-fixed": "#2f4155",
+                            "secondary-container": "#c9e7f7",
+                            "primary-container": "#c6e9e9",
+                            "on-primary-fixed": "#244545",
+                            "on-tertiary-fixed-variant": "#4b5d72",
+                            "error-container": "#fe8983",
+                            primary: "#455A64",
+                            "on-surface-variant": "#586064",
+                            secondary: "#466370",
+                            "outline-variant": "#abb3b7",
+                            "primary-fixed-dim": "#b8dbda",
+                            "surface-container": "#eaeff1",
+                            "on-secondary-container": "#395663",
+                            "on-error-container": "#752121",
+                            "inverse-on-surface": "#9b9d9e",
+                            "on-background": "#2b3437",
+                            "on-secondary": "#f3faff",
+                            "on-error": "#fff7f6",
+                            outline: "#737c7f",
+                            "secondary-fixed": "#c9e7f7",
+                            "on-secondary-fixed-variant": "#435f6d",
+                            "on-primary-fixed-variant": "#416161",
+                            "inverse-primary": "#d4f8f7",
+                            surface: "#f8f9fa",
+                            "tertiary-dim": "#425569",
+                            "on-tertiary-container": "#415368",
+                            "tertiary-container": "#d1e4fe",
+                            "primary-dim": "#385858",
+                            "error-dim": "#4e0309",
+                            "surface-bright": "#f8f9fa",
+                            "secondary-dim": "#3a5764",
+                            background: "#f8f9fa",
+                            "surface-container-highest": "#dbe4e7",
+                            "surface-container-low": "#f1f4f6",
+                            "on-secondary-fixed": "#264350",
+                            "inverse-surface": "#0c0f10",
+                            "surface-tint": "#446464",
+                            error: "#9f403d",
+                            "on-surface": "#2b3437",
+                            "secondary-fixed-dim": "#bbd9e9",
+                            "on-primary-container": "#375757",
+                            tertiary: "#4e6176",
+                            "surface-dim": "#d1dce0",
+                            "surface-variant": "#dbe4e7",
+                        },
+                        fontFamily: {
+                            headline: ["Manrope"],
+                            body: ["Inter"],
+                            label: ["Inter"],
+                            manrope: ["Manrope", "sans-serif"],
+                            inter: ["Inter", "sans-serif"],
+                        },
+                        borderRadius: {
+                            DEFAULT: "0.25rem",
+                            md: "0.375rem",
+                            lg: "0.5rem",
+                            xl: "0.75rem",
+                            full: "9999px",
+                        },
+                    },
+                },
+            };
+        </script>
+        <style>
+            .material-symbols-outlined {
+                font-variation-settings:
+                    "FILL" 0,
+                    "wght" 400,
+                    "GRAD" 0,
+                    "opsz" 24;
+            }
+            body {
+                font-family: "Inter", sans-serif;
+            }
+            .ambient-shadow {
+                box-shadow: 0 12px 40px rgba(43, 52, 55, 0.05);
+            }
+            .transition-all {
+                transition: all 0.2s ease-in-out;
+            }
+        </style>
+    </head>
+    <body class="bg-background text-on-background">
+        <div id="root"></div>
+
+        <!-- React Dependencies -->
+        <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+        <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+        <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+        <script type="text/babel">
+            const { useState, useEffect } = React;
+            const { createRoot } = ReactDOM;
+            const {
+                MemoryRouter,
+                Routes,
+                Route,
+                Link,
+                useNavigate,
+                useLocation,
+            } = ReactRouterDOM;
+
+            // --- Reusable Components ---
+
+            const SideNavBar = () => {
+                const location = useLocation();
+                const navigate = useNavigate();
+
+                const navItems = [
+                    { path: "/", icon: "dashboard", label: "Dashboard" },
+                    { path: "/upload", icon: "cloud_upload", label: "Upload" },
+                    { path: "/archive", icon: "inventory_2", label: "Archive" },
+                    { path: "#", icon: "settings", label: "Settings" },
+                ];
+
+                return (
+                    <aside class="h-screen w-64 fixed left-0 top-0 bg-slate-50 dark:bg-slate-950 hidden lg:flex flex-col py-8 pl-4 pr-0 z-50 border-r border-slate-100 dark:border-slate-800">
+                        <div class="mb-10 pl-4">
+                            <h1 class="text-lg font-black text-slate-900 dark:text-white font-manrope tracking-wide uppercase">
+                                The Curator
+                            </h1>
+                            <p class="text-[10px] font-manrope tracking-widest text-slate-500 uppercase mt-1">
+                                Editorial Intelligence
+                            </p>
+                        </div>
+                        <nav class="flex-1 space-y-2">
+                            {navItems.map((item) => {
+                                const isActive =
+                                    location.pathname === item.path;
+                                return (
+                                    <Link
+                                        key={item.label}
+                                        to={item.path}
+                                        class={`flex items-center gap-3 py-3 px-4 transition-all duration-200 rounded-l-full ${
+                                            isActive
+                                                ? "text-slate-900 font-semibold bg-white shadow-sm"
+                                                : "text-slate-500 hover:text-slate-800 hover:translate-x-1"
+                                        }`}
+                                    >
+                                        <span
+                                            class={`material-symbols-outlined ${isActive ? "fill-1" : ""}`}
+                                            style={
+                                                isActive
+                                                    ? {
+                                                          fontVariationSettings:
+                                                              "'FILL' 1",
+                                                      }
+                                                    : {}
+                                            }
+                                        >
+                                            {item.icon}
+                                        </span>
+                                        <span class="font-manrope">
+                                            {item.label}
+                                        </span>
+                                    </Link>
+                                );
+                            })}
+                        </nav>
+                        <div class="mt-auto pr-4">
+                            <button
+                                onClick={() => navigate("/upload")}
+                                class="w-full bg-primary text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 ambient-shadow hover:brightness-110 transition-all"
+                            >
+                                <span class="material-symbols-outlined">
+                                    add
+                                </span>
+                                New Transcription
+                            </button>
+                        </div>
+                    </aside>
+                );
+            };
+
+            const TopNavBar = ({ title = "Curator AI" }) => {
+                const navigate = useNavigate();
+                return (
+                    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 shadow-sm border-b border-slate-100 dark:border-slate-800">
+                        <div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+                            <div class="flex items-center gap-8">
+                                <span class="text-xl font-bold tracking-tight text-slate-800 dark:text-white font-manrope">
+                                    {title}
+                                </span>
+                                <nav class="hidden md:flex items-center gap-6 font-manrope text-sm font-medium">
+                                    <Link
+                                        to="/"
+                                        class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors"
+                                    >
+                                        Dashboard
+                                    </Link>
+                                    <Link
+                                        to="/archive"
+                                        class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors"
+                                    >
+                                        Archive
+                                    </Link>
+                                </nav>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="relative hidden sm:block">
+                                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                                        search
+                                    </span>
+                                    <input
+                                        class="bg-surface-container-high dark:bg-slate-800 border-none rounded-full pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 w-64"
+                                        placeholder="Search archive..."
+                                        type="text"
+                                    />
+                                </div>
+                                <button class="p-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all">
+                                    <span class="material-symbols-outlined">
+                                        notifications
+                                    </span>
+                                </button>
+                                <button class="p-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 rounded-lg transition-all">
+                                    <span class="material-symbols-outlined">
+                                        settings
+                                    </span>
+                                </button>
+                                <div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+                                    <img
+                                        alt="User Profile"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkBZY7ipO4t968onq5UEb3OP11e8ZoaIaBTw9kN1Pk9kXI6rtNUQU6z6jPX6UhBcvO-i-Yi1AkOW4lMm3A9m7b0izzsiHGX25CndU4cx__il6gbf8S6-Yog5Htp95vCM19M8S0AMpQhELS1HFYGMK36LqIbYyoTFN5o13hFRFE6UrJnH6xVb9ddBRTcfe6kdNDG0kePSVAESj_y2RcIuWuA5YciPKbBimo866uq_Ug3KFuoZN47wzQ5SndhcHAfKA719ccJ27DV5Jw"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                );
+            };
+
+            const Footer = () => (
+                <footer class="w-full px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto full-width border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+                    <p class="font-inter text-xs uppercase tracking-widest text-slate-400">
+                        © 2024 Editorial Intelligence. All rights reserved.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-6">
+                        <a
+                            class="font-inter text-xs uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:hover:text-white transition-opacity"
+                            href="#"
+                        >
+                            Privacy Policy
+                        </a>
+                        <a
+                            class="font-inter text-xs uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:hover:text-white transition-opacity"
+                            href="#"
+                        >
+                            Terms of Service
+                        </a>
+                        <a
+                            class="font-inter text-xs uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:hover:text-white transition-opacity"
+                            href="#"
+                        >
+                            API Documentation
+                        </a>
+                        <a
+                            class="font-inter text-xs uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:hover:text-white transition-opacity"
+                            href="#"
+                        >
+                            Help Center
+                        </a>
+                    </div>
+                </footer>
+            );
+
+            // --- Pages ---
+
+            const DashboardPage = () => {
+                const navigate = useNavigate();
+                return (
+                    <div class="flex flex-col min-h-screen">
+                        <TopNavBar />
+                        <div class="p-8 md:p-12 lg:p-20 max-w-screen-2xl mx-auto w-full">
+                            <section class="mb-16">
+                                <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+                                    <div>
+                                        <h2 class="text-4xl md:text-5xl font-extrabold font-manrope text-on-background tracking-tight mb-4">
+                                            Good morning, Curator.
+                                        </h2>
+                                        <p class="text-on-surface-variant text-lg max-w-xl">
+                                            Your intelligence engine has
+                                            processed 4 meetings today. Here is
+                                            your editorial digest.
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => navigate("/upload")}
+                                        class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-lg flex items-center gap-3 ambient-shadow hover:scale-[1.02] transition-transform"
+                                    >
+                                        <span class="material-symbols-outlined">
+                                            cloud_upload
+                                        </span>
+                                        Upload New Recording
+                                    </button>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-xl ambient-shadow border border-slate-100/50 dark:border-slate-800">
+                                        <p class="font-label text-xs uppercase tracking-widest text-on-surface-variant mb-2">
+                                            Total Recorded Hours
+                                        </p>
+                                        <p class="text-4xl font-extrabold font-manrope text-primary">
+                                            124.5
+                                        </p>
+                                        <div class="mt-4 flex items-center gap-2 text-sm text-primary">
+                                            <span class="material-symbols-outlined text-sm">
+                                                trending_up
+                                            </span>
+                                            <span>12% increase this month</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-tertiary-container dark:bg-slate-800 p-8 rounded-xl ambient-shadow">
+                                        <p class="font-label text-xs uppercase tracking-widest text-on-tertiary-container dark:text-slate-400 mb-2">
+                                            Summaries Completed
+                                        </p>
+                                        <p class="text-4xl font-extrabold font-manrope text-on-tertiary-container dark:text-white">
+                                            842
+                                        </p>
+                                        <div class="mt-4 flex items-center gap-2 text-sm text-on-tertiary-container dark:text-slate-400 opacity-70">
+                                            <span class="material-symbols-outlined text-sm">
+                                                check_circle
+                                            </span>
+                                            <span>All tasks synchronized</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-secondary-container dark:bg-slate-800 p-8 rounded-xl ambient-shadow">
+                                        <p class="font-label text-xs uppercase tracking-widest text-on-secondary-container dark:text-slate-400 mb-2">
+                                            Saved Editorial Time
+                                        </p>
+                                        <p class="text-4xl font-extrabold font-manrope text-on-secondary-container dark:text-white">
+                                            42 hrs
+                                        </p>
+                                        <div class="mt-4 flex items-center gap-2 text-sm text-on-secondary-container dark:text-slate-400 opacity-70">
+                                            <span class="material-symbols-outlined text-sm">
+                                                bolt
+                                            </span>
+                                            <span>Efficiency peak reached</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section>
+                                <div class="flex items-center justify-between mb-8">
+                                    <h3 class="text-2xl font-bold font-manrope text-on-background">
+                                        Recent Recordings
+                                    </h3>
+                                    <Link
+                                        to="/archive"
+                                        class="text-sm font-semibold text-primary hover:underline"
+                                    >
+                                        View All Archive
+                                    </Link>
+                                </div>
+                                <div class="space-y-4">
+                                    {[
+                                        {
+                                            title: "Q3 Strategy Alignment Workshop",
+                                            date: "Oct 24, 2024",
+                                            duration: "54m 12s",
+                                            status: "Summary Ready",
+                                            icon: "mic",
+                                            link: "/summary",
+                                        },
+                                        {
+                                            title: "Product Design Review: Canvas 2.0",
+                                            date: "Oct 23, 2024",
+                                            duration: "1h 05m",
+                                            status: "Transcribing",
+                                            icon: "video_camera_front",
+                                            link: "/archive",
+                                        },
+                                        {
+                                            title: "Weekly Sync: Engineering & Ops",
+                                            date: "Oct 22, 2024",
+                                            duration: "32m 45s",
+                                            status: "Summary Ready",
+                                            icon: "mic",
+                                            link: "/summary",
+                                        },
+                                        {
+                                            title: "Client Onboarding: Stellar Dynamics",
+                                            date: "Oct 20, 2024",
+                                            duration: "45m 00s",
+                                            status: "Summary Ready",
+                                            icon: "chat",
+                                            link: "/summary",
+                                        },
+                                    ].map((rec, i) => (
+                                        <div
+                                            key={i}
+                                            onClick={() => navigate(rec.link)}
+                                            class="group bg-surface-container-low dark:bg-slate-900 hover:bg-surface-container-lowest dark:hover:bg-slate-800 transition-colors p-6 rounded-xl flex flex-col md:flex-row md:items-center gap-6 cursor-pointer border border-transparent hover:border-slate-100 dark:hover:border-slate-700"
+                                        >
+                                            <div class="h-14 w-14 rounded-lg bg-white dark:bg-slate-700 flex items-center justify-center text-primary ambient-shadow group-hover:scale-110 transition-transform">
+                                                <span
+                                                    class="material-symbols-outlined"
+                                                    style={{
+                                                        fontVariationSettings:
+                                                            "'FILL' 1",
+                                                    }}
+                                                >
+                                                    {rec.icon}
+                                                </span>
+                                            </div>
+                                            <div class="flex-1">
+                                                <h4 class="text-lg font-bold font-manrope group-hover:text-primary transition-colors">
+                                                    {rec.title}
+                                                </h4>
+                                                <div class="flex items-center gap-4 mt-1 text-sm text-on-surface-variant">
+                                                    <span class="flex items-center gap-1">
+                                                        <span class="material-symbols-outlined text-sm">
+                                                            calendar_today
+                                                        </span>{" "}
+                                                        {rec.date}
+                                                    </span>
+                                                    <span class="flex items-center gap-1">
+                                                        <span class="material-symbols-outlined text-sm">
+                                                            schedule
+                                                        </span>{" "}
+                                                        {rec.duration}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-3">
+                                                <span
+                                                    class={`${rec.status === "Transcribing" ? "bg-primary-fixed text-on-primary-fixed-variant" : "bg-tertiary-fixed text-on-tertiary-fixed-variant"} px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider`}
+                                                >
+                                                    {rec.status}
+                                                </span>
+                                                <button class="p-2 text-slate-400 hover:text-primary transition-colors">
+                                                    <span class="material-symbols-outlined">
+                                                        more_vert
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        </div>
+                        <Footer />
+                    </div>
+                );
+            };
+
+            const ArchivePage = () => {
+                const navigate = useNavigate();
+                const archiveItems = [
+                    {
+                        id: 1,
+                        title: "Q3 Product Strategy Sync",
+                        date: "October 24, 2024",
+                        tags: ["Team Sync", "Strategy"],
+                        icon: "groups",
+                        color: "bg-secondary-container text-on-secondary-container",
+                    },
+                    {
+                        id: 2,
+                        title: "Client Briefing: Northstar",
+                        date: "October 22, 2024",
+                        tags: ["Client Call", "Design"],
+                        icon: "person",
+                        color: "bg-tertiary-container text-on-tertiary-container",
+                    },
+                    {
+                        id: 3,
+                        title: "Board Review: Q4 Financial Targets",
+                        date: "Oct 19",
+                        tags: ["Finance"],
+                        icon: "auto_awesome",
+                        color: "bg-primary text-on-primary",
+                        featured: true,
+                    },
+                    {
+                        id: 4,
+                        title: "Internal Retro: Project Apex",
+                        date: "October 15, 2024",
+                        tags: ["Retrospective", "Operations"],
+                        icon: "description",
+                        color: "bg-surface-container text-on-surface-variant",
+                    },
+                    {
+                        id: 5,
+                        title: "Interview: Senior Architect Candidate",
+                        date: "October 12, 2024",
+                        tags: ["Hiring", "Engineering"],
+                        icon: "record_voice_over",
+                        color: "bg-secondary-container text-on-secondary-container",
+                    },
+                ];
+
+                return (
+                    <div class="flex flex-col min-h-screen">
+                        <TopNavBar title="Meeting Archive" />
+                        <div class="px-8 py-12 max-w-screen-2xl mx-auto w-full flex-1">
+                            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                                <div>
+                                    <h1 class="text-4xl font-extrabold font-manrope tracking-tight text-on-background mb-2">
+                                        Meeting Archive
+                                    </h1>
+                                    <p class="text-on-surface-variant max-w-lg">
+                                        Access and manage your library of
+                                        intelligence. Every conversation,
+                                        distilled and indexed for your
+                                        convenience.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="flex bg-surface-container dark:bg-slate-800 rounded-lg p-1">
+                                        <button class="px-4 py-2 bg-white dark:bg-slate-700 shadow-sm rounded-md text-sm font-semibold flex items-center gap-2">
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                style={{
+                                                    fontVariationSettings:
+                                                        "'FILL' 1",
+                                                }}
+                                            >
+                                                grid_view
+                                            </span>
+                                            Grid
+                                        </button>
+                                        <button class="px-4 py-2 text-on-surface-variant hover:text-on-background text-sm font-semibold flex items-center gap-2 transition-colors">
+                                            <span class="material-symbols-outlined text-lg">
+                                                list
+                                            </span>
+                                            List
+                                        </button>
+                                    </div>
+                                    <button class="flex items-center gap-2 bg-surface-container-high dark:bg-slate-800 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-surface-container-highest transition-colors">
+                                        <span class="material-symbols-outlined text-lg">
+                                            filter_list
+                                        </span>
+                                        Filters
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                                {archiveItems.map((item) =>
+                                    item.featured ? (
+                                        <div
+                                            key={item.id}
+                                            class="group relative bg-primary text-on-primary p-8 rounded-3xl transition-all duration-300 hover:shadow-[0_12px_40px_rgba(68,100,100,0.2)] overflow-hidden cursor-pointer"
+                                            onClick={() => navigate("/summary")}
+                                        >
+                                            <div class="absolute -right-10 -top-10 opacity-10">
+                                                <span class="material-symbols-outlined text-[160px]">
+                                                    auto_awesome
+                                                </span>
+                                            </div>
+                                            <div class="relative z-10 flex flex-col h-full">
+                                                <div class="mb-8">
+                                                    <span class="bg-on-primary/20 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">
+                                                        Featured insight
+                                                    </span>
+                                                </div>
+                                                <h3 class="text-2xl font-black font-manrope mb-4 leading-tight">
+                                                    {item.title}
+                                                </h3>
+                                                <p class="text-white/70 text-sm mb-auto line-clamp-3">
+                                                    The session concluded with a
+                                                    unanimous decision to
+                                                    increase R&D investment by
+                                                    12% focusing on generative
+                                                    editorial tools...
+                                                </p>
+                                                <div class="pt-8 flex items-center gap-4">
+                                                    <span class="text-sm font-medium">
+                                                        {item.date}
+                                                    </span>
+                                                    <div class="h-1 w-1 rounded-full bg-on-primary/40"></div>
+                                                    <span class="text-sm font-medium">
+                                                        {item.tags[0]}
+                                                    </span>
+                                                    <button class="ml-auto w-10 h-10 bg-white text-primary rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                                        <span
+                                                            class="material-symbols-outlined"
+                                                            style={{
+                                                                fontVariationSettings:
+                                                                    "'FILL' 1",
+                                                            }}
+                                                        >
+                                                            play_arrow
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div
+                                            key={item.id}
+                                            class="group relative bg-surface-container-lowest dark:bg-slate-900 p-8 rounded-3xl transition-all duration-300 hover:shadow-[0_12px_40px_rgba(43,52,55,0.05)] border border-transparent hover:border-outline-variant/10 cursor-pointer"
+                                            onClick={() => navigate("/summary")}
+                                        >
+                                            <div class="flex justify-between items-start mb-6">
+                                                <div
+                                                    class={`h-12 w-12 ${item.color.split(" ")[0]} rounded-2xl flex items-center justify-center`}
+                                                >
+                                                    <span
+                                                        class={`material-symbols-outlined ${item.color.split(" ")[1]}`}
+                                                    >
+                                                        {item.icon}
+                                                    </span>
+                                                </div>
+                                                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <button
+                                                        onClick={(e) =>
+                                                            e.stopPropagation()
+                                                        }
+                                                        class="p-2 hover:bg-error-container/20 rounded-full text-error transition-colors"
+                                                        title="Delete"
+                                                    >
+                                                        <span class="material-symbols-outlined text-xl">
+                                                            delete
+                                                        </span>
+                                                    </button>
+                                                    <button
+                                                        onClick={(e) =>
+                                                            e.stopPropagation()
+                                                        }
+                                                        class="p-2 hover:bg-primary-container/30 rounded-full text-primary transition-colors"
+                                                        title="Download"
+                                                    >
+                                                        <span class="material-symbols-outlined text-xl">
+                                                            download
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-6">
+                                                <h3 class="text-xl font-bold font-manrope mb-2 line-clamp-1">
+                                                    {item.title}
+                                                </h3>
+                                                <p class="text-sm text-on-surface-variant flex items-center gap-2">
+                                                    <span class="material-symbols-outlined text-xs">
+                                                        calendar_today
+                                                    </span>
+                                                    {item.date}
+                                                </p>
+                                            </div>
+                                            <div class="flex flex-wrap gap-2 mb-8">
+                                                {item.tags.map((tag) => (
+                                                    <span
+                                                        key={tag}
+                                                        class="bg-surface-container-high dark:bg-slate-800 text-on-surface-variant text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full"
+                                                    >
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <div class="pt-6 border-t border-outline-variant/10">
+                                                <div class="flex items-center justify-between group/link">
+                                                    <span class="font-semibold text-primary">
+                                                        View Summary
+                                                    </span>
+                                                    <span class="material-symbols-outlined group-hover/link:translate-x-1 transition-transform">
+                                                        arrow_forward
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ),
+                                )}
+                                <div
+                                    onClick={() => navigate("/upload")}
+                                    class="group relative border-2 border-dashed border-outline-variant/30 p-8 rounded-3xl flex flex-col items-center justify-center text-center hover:bg-surface-container/30 transition-colors cursor-pointer"
+                                >
+                                    <div class="w-16 h-16 rounded-full bg-surface-container dark:bg-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                        <span class="material-symbols-outlined text-3xl text-on-surface-variant">
+                                            history
+                                        </span>
+                                    </div>
+                                    <h4 class="font-bold text-on-surface-variant mb-1">
+                                        Old recordings?
+                                    </h4>
+                                    <p class="text-xs text-on-surface-variant/60 px-8">
+                                        Drag and drop any legacy audio files to
+                                        transcribe and archive them here.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="mt-16 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-outline-variant/10 pt-10">
+                                <div class="text-sm font-medium text-on-surface-variant">
+                                    Showing{" "}
+                                    <span class="text-on-background font-bold">
+                                        5
+                                    </span>{" "}
+                                    of{" "}
+                                    <span class="text-on-background font-bold">
+                                        128
+                                    </span>{" "}
+                                    summaries
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors">
+                                        <span class="material-symbols-outlined">
+                                            chevron_left
+                                        </span>
+                                    </button>
+                                    <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">
+                                        1
+                                    </button>
+                                    <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors font-bold">
+                                        2
+                                    </button>
+                                    <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors font-bold">
+                                        3
+                                    </button>
+                                    <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors">
+                                        <span class="material-symbols-outlined">
+                                            chevron_right
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <Footer />
+                    </div>
+                );
+            };
+
+            const SummaryPage = () => {
+                return (
+                    <div class="flex flex-col min-h-screen">
+                        <TopNavBar title="Product Strategy Sync" />
+                        <main class="p-8 lg:p-20 bg-background max-w-screen-2xl mx-auto w-full">
+                            <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                                <div>
+                                    <nav class="flex items-center gap-2 text-on-surface-variant text-sm mb-4">
+                                        <Link to="/">Dashboard</Link>
+                                        <span class="material-symbols-outlined text-sm">
+                                            chevron_right
+                                        </span>
+                                        <span class="text-on-background font-medium">
+                                            Product Strategy Sync
+                                        </span>
+                                    </nav>
+                                    <h1 class="text-4xl lg:text-5xl font-extrabold text-on-background leading-tight">
+                                        Product Strategy Sync: Q4 Planning
+                                    </h1>
+                                    <div class="flex items-center gap-4 mt-4 text-on-surface-variant font-medium">
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-lg">
+                                                calendar_today
+                                            </span>{" "}
+                                            Oct 24, 2024
+                                        </span>
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-lg">
+                                                schedule
+                                            </span>{" "}
+                                            42 Minutes
+                                        </span>
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-lg">
+                                                group
+                                            </span>{" "}
+                                            5 Participants
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button class="bg-surface-container-high hover:bg-surface-container-highest dark:bg-slate-800 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2">
+                                        <span class="material-symbols-outlined">
+                                            content_copy
+                                        </span>
+                                        Copy Summary
+                                    </button>
+                                    <button class="bg-primary text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 shadow-md shadow-primary/20">
+                                        <span class="material-symbols-outlined">
+                                            picture_as_pdf
+                                        </span>
+                                        Export as PDF
+                                    </button>
+                                </div>
+                            </div>
+
+                            <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
+                                <div class="lg:col-span-2 bg-surface-container-lowest dark:bg-slate-900 p-10 rounded-[2rem] shadow-sm border border-outline-variant/10">
+                                    <div class="flex items-center gap-3 mb-6">
+                                        <span class="w-2 h-8 bg-primary rounded-full"></span>
+                                        <h2 class="text-2xl font-bold text-on-background">
+                                            Executive Overview
+                                        </h2>
+                                    </div>
+                                    <p class="text-on-surface-variant leading-relaxed text-lg mb-8">
+                                        The session focused on aligning the
+                                        engineering roadmap with the Q4
+                                        marketing initiatives. Key discussions
+                                        centered around the launch of the
+                                        AI-powered curator module and addressing
+                                        existing technical debt in the storage
+                                        layer. The team reached a consensus on
+                                        prioritizing performance over new
+                                        secondary features for the first half of
+                                        the quarter.
+                                    </p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div class="p-6 bg-surface-container-low dark:bg-slate-800 rounded-2xl">
+                                            <h3 class="font-bold text-on-background mb-2">
+                                                Key Themes
+                                            </h3>
+                                            <div class="flex flex-wrap gap-2">
+                                                <span class="bg-secondary-container dark:bg-slate-700 text-on-secondary-container dark:text-white px-3 py-1 rounded-lg text-sm font-medium">
+                                                    Scalability
+                                                </span>
+                                                <span class="bg-secondary-container dark:bg-slate-700 text-on-secondary-container dark:text-white px-3 py-1 rounded-lg text-sm font-medium">
+                                                    AI Integration
+                                                </span>
+                                                <span class="bg-secondary-container dark:bg-slate-700 text-on-secondary-container dark:text-white px-3 py-1 rounded-lg text-sm font-medium">
+                                                    UX Refinement
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="p-6 bg-surface-container-low dark:bg-slate-800 rounded-2xl">
+                                            <h3 class="font-bold text-on-background mb-2">
+                                                Sentiment Analysis
+                                            </h3>
+                                            <div class="flex items-center gap-2">
+                                                <span
+                                                    class="material-symbols-outlined text-primary"
+                                                    style={{
+                                                        fontVariationSettings:
+                                                            "'FILL' 1",
+                                                    }}
+                                                >
+                                                    trending_up
+                                                </span>
+                                                <span class="font-semibold text-on-background">
+                                                    Positive / Collaborative
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-tertiary-container dark:bg-slate-800 text-on-tertiary-container dark:text-white p-10 rounded-[2rem] flex flex-col shadow-sm">
+                                    <div class="flex items-center gap-3 mb-8">
+                                        <span class="material-symbols-outlined text-3xl">
+                                            task_alt
+                                        </span>
+                                        <h2 class="text-2xl font-bold">
+                                            Action Items
+                                        </h2>
+                                    </div>
+                                    <ul class="space-y-6 flex-1">
+                                        <li class="flex gap-4">
+                                            <div class="min-w-[24px] h-6 rounded-full border-2 border-slate-400 flex items-center justify-center mt-1"></div>
+                                            <div>
+                                                <p class="font-bold">
+                                                    Update Roadmap
+                                                </p>
+                                                <p class="text-sm opacity-80">
+                                                    Sarah to integrate AI module
+                                                    milestones into Jira by
+                                                    Friday.
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="flex gap-4">
+                                            <div class="min-w-[24px] h-6 rounded-full border-2 border-slate-400 flex items-center justify-center mt-1"></div>
+                                            <div>
+                                                <p class="font-bold">
+                                                    Finalize UI Mockups
+                                                </p>
+                                                <p class="text-sm opacity-80">
+                                                    Design team needs to provide
+                                                    the 'Dark Mode' specs for
+                                                    the dashboard.
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="flex gap-4">
+                                            <div class="min-w-[24px] h-6 rounded-full border-2 border-slate-400 flex items-center justify-center mt-1"></div>
+                                            <div>
+                                                <p class="font-bold">
+                                                    Infrastructure Audit
+                                                </p>
+                                                <p class="text-sm opacity-80">
+                                                    Marcus to run a load test on
+                                                    the new storage clusters.
+                                                </p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <button class="mt-8 py-3 bg-slate-900 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                                        <span class="material-symbols-outlined">
+                                            sync
+                                        </span>
+                                        Sync to Notion
+                                    </button>
+                                </div>
+                            </section>
+
+                            <section class="max-w-4xl mx-auto">
+                                <h2 class="text-3xl font-bold text-on-background mb-10">
+                                    Full Transcript
+                                </h2>
+                                <div class="space-y-12">
+                                    <div class="flex gap-8">
+                                        <div class="hidden md:block w-16 text-on-surface-variant text-sm font-mono pt-1">
+                                            02:14
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="flex items-center gap-3 mb-2">
+                                                <span class="font-bold text-on-background">
+                                                    Sarah Johnson
+                                                </span>
+                                                <span class="bg-surface-container text-on-surface-variant text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">
+                                                    Product Lead
+                                                </span>
+                                            </div>
+                                            <p class="text-on-background leading-relaxed text-lg">
+                                                Alright team, let's look at the
+                                                Q4 roadmap. We need to be
+                                                realistic about the AI curator
+                                                launch. Are we looking at a
+                                                November alpha or are we pushing
+                                                to December?
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-8 bg-tertiary-container/20 dark:bg-slate-800/50 -mx-6 px-6 py-8 rounded-[2rem] border border-tertiary-container/30">
+                                        <div class="hidden md:block w-16 text-on-surface-variant text-sm font-mono pt-1">
+                                            05:30
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <div class="flex items-center gap-3">
+                                                    <span class="font-bold text-on-background">
+                                                        Marcus Chen
+                                                    </span>
+                                                    <span class="bg-surface-container text-on-surface-variant text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">
+                                                        Engineering
+                                                    </span>
+                                                </div>
+                                                <span class="flex items-center gap-1 text-primary text-xs font-bold uppercase tracking-widest">
+                                                    <span class="material-symbols-outlined text-[16px]">
+                                                        bolt
+                                                    </span>{" "}
+                                                    AI Insight
+                                                </span>
+                                            </div>
+                                            <p class="text-on-background leading-relaxed text-lg">
+                                                Technically, the core engine is
+                                                90% there. The bottleneck right
+                                                now is the storage layer's
+                                                latency when processing large
+                                                audio files.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-20 text-center">
+                                    <button class="text-on-surface-variant hover:text-on-background font-semibold flex items-center gap-2 mx-auto transition-colors">
+                                        <span class="material-symbols-outlined">
+                                            expand_more
+                                        </span>
+                                        Show Full Transcript (3,420 words)
+                                    </button>
+                                </div>
+                            </section>
+                        </main>
+                        <Footer />
+                    </div>
+                );
+            };
+
+            const UploadPage = () => {
+                const navigate = useNavigate();
+                return (
+                    <div class="flex flex-col min-h-screen">
+                        <TopNavBar title="Upload Content" />
+                        <section class="flex-1 flex items-center justify-center px-6 py-12 md:px-20 lg:px-40">
+                            <div class="w-full max-w-2xl space-y-12">
+                                <div class="text-center">
+                                    <h1 class="text-4xl md:text-5xl font-black text-on-background tracking-tight mb-4">
+                                        Feed the intelligence.
+                                    </h1>
+                                    <p class="text-on-surface-variant text-lg leading-relaxed max-w-xl mx-auto">
+                                        Upload your audio files to begin the
+                                        editorial distillation. Our AI
+                                        identifies key speakers, extracts core
+                                        insights, and generates high-fidelity
+                                        summaries.
+                                    </p>
+                                </div>
+
+                                <div class="space-y-8">
+                                    <div class="group relative bg-surface-container-low dark:bg-slate-900 rounded-[2rem] border-2 border-dashed border-outline-variant/30 hover:border-primary/50 transition-all cursor-pointer p-12 flex flex-col items-center justify-center text-center overflow-hidden">
+                                        <div class="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity bg-primary pointer-events-none"></div>
+                                        <div class="relative z-10">
+                                            <div class="w-20 h-20 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-xl shadow-slate-200/50 mb-6 mx-auto group-hover:scale-110 transition-transform">
+                                                <span class="material-symbols-outlined text-4xl text-primary">
+                                                    audio_file
+                                                </span>
+                                            </div>
+                                            <h3 class="text-2xl font-bold text-on-surface mb-2">
+                                                Drop your audio file here
+                                            </h3>
+                                            <p class="text-on-surface-variant font-medium">
+                                                MP3, WAV, or M4A up to 500MB
+                                            </p>
+                                            <button class="mt-8 px-8 py-3 bg-slate-200 dark:bg-slate-700 text-on-surface font-semibold rounded-full hover:bg-primary hover:text-white transition-all">
+                                                Select from Computer
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-4">
+                                        <div class="space-y-1">
+                                            <label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant px-1">
+                                                Meeting Name *
+                                            </label>
+                                            <input
+                                                class="w-full bg-surface-container-low dark:bg-slate-900 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-outline-variant"
+                                                placeholder="Enter meeting title..."
+                                                type="text"
+                                            />
+                                        </div>
+                                        <div class="space-y-1">
+                                            <label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant px-1">
+                                                Description
+                                            </label>
+                                            <textarea
+                                                class="w-full bg-surface-container-low dark:bg-slate-900 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-outline-variant min-h-[100px] resize-none"
+                                                placeholder="Optional context for the AI..."
+                                            ></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="pt-4">
+                                        <button
+                                            onClick={() => navigate("/archive")}
+                                            class="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black text-lg tracking-tight shadow-2xl shadow-slate-900/20 flex items-center justify-center gap-3 group transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                        >
+                                            <span>Start Processing</span>
+                                            <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">
+                                                bolt
+                                            </span>
+                                        </button>
+                                        <p class="text-center text-[10px] text-on-surface-variant mt-4 uppercase tracking-[0.2em] font-bold">
+                                            Ready to analyze 1 file:
+                                            Q2_Strategy.mp3
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="pt-8">
+                                    <div class="flex items-center justify-between mb-6">
+                                        <h3 class="text-xl font-bold">
+                                            Recent Uploads
+                                        </h3>
+                                        <Link
+                                            to="/archive"
+                                            class="text-sm font-semibold text-primary flex items-center gap-1 group"
+                                        >
+                                            View Full Archive
+                                            <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">
+                                                arrow_forward
+                                            </span>
+                                        </Link>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-outline-variant/10 hover:shadow-lg transition-all">
+                                            <div class="w-12 h-12 bg-surface-container-low dark:bg-slate-800 rounded-xl flex items-center justify-center mb-4 text-on-surface-variant">
+                                                <span class="material-symbols-outlined">
+                                                    description
+                                                </span>
+                                            </div>
+                                            <h4 class="font-bold text-on-surface truncate">
+                                                Product Roadmap Sync
+                                            </h4>
+                                            <p class="text-xs text-on-surface-variant mb-4">
+                                                Processed 2 hours ago
+                                            </p>
+                                            <span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded uppercase tracking-wider">
+                                                Action Items
+                                            </span>
+                                        </div>
+                                        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-outline-variant/10 hover:shadow-lg transition-all">
+                                            <div class="w-12 h-12 bg-surface-container-low dark:bg-slate-800 rounded-xl flex items-center justify-center mb-4 text-on-surface-variant">
+                                                <span class="material-symbols-outlined">
+                                                    mic
+                                                </span>
+                                            </div>
+                                            <h4 class="font-bold text-on-surface truncate">
+                                                Client Onboarding
+                                            </h4>
+                                            <p class="text-xs text-on-surface-variant mb-4">
+                                                Processed yesterday
+                                            </p>
+                                            <span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold rounded uppercase tracking-wider">
+                                                Interview
+                                            </span>
+                                        </div>
+                                        <div class="border-2 border-dotted border-outline-variant/20 p-6 rounded-2xl flex flex-col items-center justify-center text-center opacity-60">
+                                            <span class="material-symbols-outlined text-outline-variant mb-2">
+                                                add_circle
+                                            </span>
+                                            <p class="text-xs font-medium text-on-surface-variant">
+                                                Ready for more?
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <Footer />
+                    </div>
+                );
+            };
+
+            // --- App Layout ---
+
+            const App = () => {
+                return (
+                    <div class="min-h-screen bg-background">
+                        <SideNavBar />
+                        <div class="lg:ml-64 min-h-screen flex flex-col">
+                            <Routes>
+                                <Route path="/" element={<DashboardPage />} />
+                                <Route
+                                    path="/archive"
+                                    element={<ArchivePage />}
+                                />
+                                <Route
+                                    path="/upload"
+                                    element={<UploadPage />}
+                                />
+                                <Route
+                                    path="/summary"
+                                    element={<SummaryPage />}
+                                />
+                            </Routes>
+                        </div>
+                    </div>
+                );
+            };
+
+            const root = createRoot(document.getElementById("root"));
+            root.render(
+                <MemoryRouter>
+                    <App />
+                </MemoryRouter>,
+            );
+        </script>
+    </body>
+</html>

@@ -1,0 +1,11 @@
+fastapi==0.115.*
+uvicorn[standard]==0.34.*
+python-dotenv==1.1.*
+pydantic==2.11.*
+pydantic-settings==2.9.*
+supabase==2.28.*
+celery[redis]==5.5.*
+PyJWT==2.10.*
+python-multipart==0.0.20
+httpx==0.28.*
+cryptography==44.*

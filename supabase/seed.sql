@@ -1,0 +1,14 @@
+-- ============================================
+-- Seed data (for local development only)
+-- ============================================
+-- Note: You need a valid user_id from Supabase Auth
+-- After signing up a test user, replace the UUID below
+
+-- INSERT INTO jobs (user_id, title, description, status, progress)
+-- VALUES (
+--     '00000000-0000-0000-0000-000000000000',  -- replace with real user_id
+--     'Test Meeting: Q4 Planning',
+--     'A test meeting for development purposes.',
+--     'completed',
+--     100
+-- );

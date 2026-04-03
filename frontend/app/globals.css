@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* === Color Palette (from original design) === */
+  --color-primary: #455A64;
+  --color-primary-dim: #385858;
+  --color-primary-container: #c6e9e9;
+  --color-primary-fixed: #c6e9e9;
+  --color-primary-fixed-dim: #b8dbda;
+  --color-on-primary: #dbfffe;
+  --color-on-primary-container: #375757;
+  --color-on-primary-fixed: #244545;
+  --color-on-primary-fixed-variant: #416161;
+  --color-inverse-primary: #d4f8f7;
+
+  --color-secondary: #466370;
+  --color-secondary-dim: #3a5764;
+  --color-secondary-container: #c9e7f7;
+  --color-secondary-fixed: #c9e7f7;
+  --color-secondary-fixed-dim: #bbd9e9;
+  --color-on-secondary: #f3faff;
+  --color-on-secondary-container: #395663;
+  --color-on-secondary-fixed: #264350;
+  --color-on-secondary-fixed-variant: #435f6d;
+
+  --color-tertiary: #4e6176;
+  --color-tertiary-dim: #425569;
+  --color-tertiary-container: #d1e4fe;
+  --color-tertiary-fixed: #d1e4fe;
+  --color-tertiary-fixed-dim: #c3d6ef;
+  --color-on-tertiary: #f7f9ff;
+  --color-on-tertiary-container: #415368;
+  --color-on-tertiary-fixed: #2f4155;
+  --color-on-tertiary-fixed-variant: #4b5d72;
+
+  --color-error: #9f403d;
+  --color-error-dim: #4e0309;
+  --color-error-container: #fe8983;
+  --color-on-error: #fff7f6;
+  --color-on-error-container: #752121;
+
+  --color-background: #f8f9fa;
+  --color-on-background: #2b3437;
+  --color-surface: #f8f9fa;
+  --color-surface-bright: #f8f9fa;
+  --color-surface-dim: #d1dce0;
+  --color-surface-tint: #446464;
+  --color-surface-variant: #dbe4e7;
+  --color-surface-container: #eaeff1;
+  --color-surface-container-low: #f1f4f6;
+  --color-surface-container-high: #e3e9ec;
+  --color-surface-container-highest: #dbe4e7;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface: #2b3437;
+  --color-on-surface-variant: #586064;
+  --color-inverse-surface: #0c0f10;
+  --color-inverse-on-surface: #9b9d9e;
+
+  --color-outline: #737c7f;
+  --color-outline-variant: #abb3b7;
+
+  /* === Fonts === */
+  --font-headline: "Manrope", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "Inter", sans-serif;
+  --font-manrope: "Manrope", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+/* Material Symbols icon font settings */
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+}
+
+.fill-1 {
+  font-variation-settings: "FILL" 1;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--color-background);
+  color: var(--color-on-background);
+}
+
+.ambient-shadow {
+  box-shadow: 0 12px 40px rgba(43, 52, 55, 0.05);
+}
