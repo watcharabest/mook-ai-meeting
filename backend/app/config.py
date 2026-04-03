@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     # Supabase
     supabase_url: str
     supabase_service_key: str
-    supabase_jwt_secret: str
+    supabase_jwt_secret: str = ""  # No longer needed — using JWKS verification
     supabase_storage_bucket: str = "audio-files"
 
     # Upstash Redis
