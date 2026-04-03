@@ -77,20 +77,39 @@ def transcribe_audio(
 
                 # Extract utterances with speaker labels
                 utterances = []
-                for utterance in transcription.get("utterances", []):
-                    utterances.append({
-                        "speaker": utterance.get("speaker", 0),
-                        "text": utterance.get("text", ""),
-                        "start": utterance.get("start", 0),
-                        "end": utterance.get("end", 0),
-                        "confidence": utterance.get("confidence", 0),
-                    })
+                detected_language = None
+                full_transcript = ""
+
+                if isinstance(transcription, dict):
+                    full_transcript = transcription.get("full_transcript", "")
+                    
+                    utterances_data = transcription.get("utterances", [])
+                    if isinstance(utterances_data, list):
+                        for utterance in utterances_data:
+                            if isinstance(utterance, dict):
+                                utterances.append({
+                                    "speaker": utterance.get("speaker", 0),
+                                    "text": utterance.get("text", ""),
+                                    "start": utterance.get("start", 0),
+                                    "end": utterance.get("end", 0),
+                                    "confidence": utterance.get("confidence", 0),
+                                })
+                    
+                    languages = transcription.get("languages", [])
+                    if languages and isinstance(languages, list):
+                        if isinstance(languages[0], dict):
+                            detected_language = languages[0].get("language")
+                        elif isinstance(languages[0], str):
+                            detected_language = languages[0]
+                elif isinstance(transcription, str):
+                    # Fallback if Gladia returns the transcript directly as a string
+                    full_transcript = transcription
 
                 return {
-                    "full_transcript": transcription.get("full_transcript", ""),
+                    "full_transcript": full_transcript,
                     "utterances": utterances,
-                    "detected_language": transcription.get("languages", [{}])[0].get("language") if transcription.get("languages") else None,
-                    "audio_duration": result.get("metadata", {}).get("audio_duration"),
+                    "detected_language": detected_language,
+                    "audio_duration": result.get("metadata", {}).get("audio_duration") if isinstance(result, dict) else None,
                 }
 
             elif status == "error":

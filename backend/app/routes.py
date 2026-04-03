@@ -36,8 +36,15 @@ def create_job(
     user_id = user["user_id"]
     job_id = str(uuid4())
 
-    # Create storage path: {user_id}/{job_id}/{filename}
-    storage_path = f"{user_id}/{job_id}/{body.audio_filename}"
+    # Extract file extension safely
+    import os
+    _, ext = os.path.splitext(body.audio_filename)
+    if not ext:
+        ext = ".mp3"  # fallback
+
+    # Create safe storage path: {user_id}/{job_id}/audio{ext}
+    # We avoid original filename here to prevent Supabase "InvalidKey" URL-encoding errors with Thai/spaces
+    storage_path = f"{user_id}/{job_id}/audio{ext}"
 
     # Generate signed upload URL
     upload_result = generate_upload_url(storage_path=storage_path)
