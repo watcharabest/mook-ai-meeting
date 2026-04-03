@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Upload - Curator AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#d1e4fe",
+              "primary-fixed": "#c6e9e9",
+              "tertiary-fixed-dim": "#c3d6ef",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#dbfffe",
+              "on-tertiary": "#f7f9ff",
+              "surface-container-high": "#e3e9ec",
+              "on-tertiary-fixed": "#2f4155",
+              "secondary-container": "#c9e7f7",
+              "primary-container": "#c6e9e9",
+              "on-primary-fixed": "#244545",
+              "on-tertiary-fixed-variant": "#4b5d72",
+              "error-container": "#fe8983",
+              "primary": "#446464",
+              "on-surface-variant": "#586064",
+              "secondary": "#466370",
+              "outline-variant": "#abb3b7",
+              "primary-fixed-dim": "#b8dbda",
+              "surface-container": "#eaeff1",
+              "on-secondary-container": "#395663",
+              "on-error-container": "#752121",
+              "inverse-on-surface": "#9b9d9e",
+              "on-background": "#2b3437",
+              "on-secondary": "#f3faff",
+              "on-error": "#fff7f6",
+              "outline": "#737c7f",
+              "secondary-fixed": "#c9e7f7",
+              "on-secondary-fixed-variant": "#435f6d",
+              "on-primary-fixed-variant": "#416161",
+              "inverse-primary": "#d4f8f7",
+              "surface": "#f8f9fa",
+              "tertiary-dim": "#425569",
+              "on-tertiary-container": "#415368",
+              "tertiary-container": "#d1e4fe",
+              "primary-dim": "#385858",
+              "error-dim": "#4e0309",
+              "surface-bright": "#f8f9fa",
+              "secondary-dim": "#3a5764",
+              "background": "#f8f9fa",
+              "surface-container-highest": "#dbe4e7",
+              "surface-container-low": "#f1f4f6",
+              "on-secondary-fixed": "#264350",
+              "inverse-surface": "#0c0f10",
+              "surface-tint": "#446464",
+              "error": "#9f403d",
+              "on-surface": "#2b3437",
+              "secondary-fixed-dim": "#bbd9e9",
+              "on-primary-container": "#375757",
+              "tertiary": "#4e6176",
+              "surface-dim": "#d1dce0",
+              "surface-variant": "#dbe4e7"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased flex min-h-screen">
+<!-- SideNavBar (The Anchor) -->
+<aside class="h-screen w-64 fixed left-0 top-0 hidden lg:flex flex-col py-8 pl-4 pr-0 bg-slate-50 dark:bg-slate-950 font-manrope tracking-wide border-r border-outline-variant/10">
+<div class="px-6 mb-12">
+<h1 class="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter">The Curator</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-bold">Editorial Intelligence</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="group flex items-center px-6 py-3 text-slate-500 dark:text-slate-500 hover:translate-x-1 transition-transform ease-out duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<!-- ACTIVE TAB: Upload -->
+<a class="group flex items-center px-6 py-3 text-slate-900 dark:text-white font-semibold bg-white dark:bg-slate-800 rounded-l-full shadow-sm" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="cloud_upload">cloud_upload</span>
+<span class="text-sm font-medium">Upload</span>
+</a>
+<a class="group flex items-center px-6 py-3 text-slate-500 dark:text-slate-500 hover:translate-x-1 transition-transform ease-out duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="inventory_2">inventory_2</span>
+<span class="text-sm font-medium">Archive</span>
+</a>
+<a class="group flex items-center px-6 py-3 text-slate-500 dark:text-slate-500 hover:translate-x-1 transition-transform ease-out duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full py-4 bg-primary text-on-primary rounded-xl font-bold text-sm tracking-wide shadow-lg shadow-primary/20 flex items-center justify-center gap-2 group transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Transcription
+            </button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 lg:ml-64 flex flex-col min-h-screen">
+<!-- Top Nav for Mobile & Desktop Context -->
+<header class="docked full-width top-0 sticky z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-4">
+<span class="lg:hidden material-symbols-outlined text-slate-800" data-icon="menu">menu</span>
+<h2 class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100 font-manrope">Upload Content</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-6 mr-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors font-manrope text-sm font-medium" href="#">Dashboard</a>
+<a class="text-slate-900 dark:text-white font-bold border-b-2 border-slate-800 dark:border-white pb-1 font-manrope text-sm font-medium" href="#">Upload New</a>
+</div>
+<div class="flex gap-3">
+<button class="p-2 rounded-lg hover:bg-slate-100/50 transition-all text-slate-700">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-slate-100/50 transition-all text-slate-700">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<section class="flex-1 flex items-center justify-center px-6 py-12 md:px-20 lg:px-40">
+<div class="w-full max-w-4xl space-y-12">
+<!-- Intentional Asymmetry: Header -->
+<div class="max-w-2xl">
+<h1 class="text-4xl md:text-5xl font-black text-on-background tracking-tight mb-4">
+                        Feed the intelligence.
+                    </h1>
+<p class="text-on-surface-variant text-lg leading-relaxed">
+                        Upload your audio files to begin the editorial distillation. Our AI identifies key speakers, extracts core insights, and generates high-fidelity summaries.
+                    </p>
+</div>
+<!-- Main Upload Bento Area -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Drag & Drop Zone -->
+<div class="md:col-span-8 group relative bg-surface-container-low rounded-[2rem] border-2 border-dashed border-outline-variant/30 hover:border-primary/50 transition-all cursor-pointer p-12 flex flex-col items-center justify-center text-center overflow-hidden">
+<!-- Decorative Gradient Background -->
+<div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity bg-gradient-to-br from-primary to-tertiary pointer-events-none"></div>
+<div class="relative z-10">
+<div class="w-20 h-20 bg-surface-container-lowest rounded-full flex items-center justify-center shadow-xl shadow-slate-200/50 mb-6 mx-auto group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="audio_file">audio_file</span>
+</div>
+<h3 class="text-2xl font-bold text-on-surface mb-2">Drop your audio file here</h3>
+<p class="text-on-surface-variant font-medium">MP3, WAV, or M4A up to 500MB</p>
+<button class="mt-8 px-8 py-3 bg-surface-container-highest text-on-surface font-semibold rounded-full hover:bg-primary hover:text-on-primary transition-all">
+                                Select from Computer
+                            </button>
+</div>
+</div>
+<!-- Processing Progress (Right Column) -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Active Processing Card -->
+<div class="bg-surface-container-lowest p-8 rounded-[2rem] shadow-sm border border-outline-variant/5">
+<div class="flex items-center justify-between mb-6">
+<span class="text-xs font-bold uppercase tracking-widest text-primary">In Progress</span>
+<span class="text-xs font-mono text-on-surface-variant">Q2_Strategy.mp3</span>
+</div>
+<div class="space-y-6">
+<!-- Step 1: Uploaded -->
+<div class="flex items-start gap-4">
+<div class="mt-1 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-on-primary" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Uploading</p>
+<p class="text-xs text-on-surface-variant">Complete • 42.1 MB</p>
+</div>
+</div>
+<!-- Step 2: Transcribing -->
+<div class="flex items-start gap-4">
+<div class="mt-1 w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
+<div class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end mb-2">
+<p class="text-sm font-bold text-on-surface">Transcribing</p>
+<span class="text-[10px] font-bold text-primary">64%</span>
+</div>
+<!-- Progress Bar -->
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 64%"></div>
+</div>
+</div>
+</div>
+<!-- Step 3: Summarizing -->
+<div class="flex items-start gap-4 opacity-40">
+<div class="mt-1 w-5 h-5 rounded-full border-2 border-outline-variant"></div>
+<div>
+<p class="text-sm font-bold text-on-surface">Summarizing</p>
+<p class="text-xs text-on-surface-variant">Pending...</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Info / Tip Card -->
+<div class="bg-tertiary-container/30 p-8 rounded-[2rem]">
+<span class="material-symbols-outlined text-tertiary mb-4" data-icon="lightbulb" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<h4 class="font-bold text-on-tertiary-container text-sm mb-2">Editorial Tip</h4>
+<p class="text-xs text-on-tertiary-container/80 leading-relaxed">
+                                Our "Advanced Recognition" detects non-verbal cues and pauses to provide a more nuanced meeting sentiment analysis.
+                            </p>
+</div>
+</div>
+</div>
+<!-- Recent Activity / Bottom Row -->
+<div class="pt-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold">Recent Uploads</h3>
+<a class="text-sm font-semibold text-primary flex items-center gap-1 group" href="#">
+                            View Full Archive
+                            <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Upload Card 1 -->
+<div class="bg-white p-6 rounded-2xl border border-outline-variant/10 hover:shadow-lg transition-all group">
+<div class="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center mb-4 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<h4 class="font-bold text-on-surface truncate">Product Roadmap Sync</h4>
+<p class="text-xs text-on-surface-variant mb-4">Processed 2 hours ago</p>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded uppercase tracking-wider">Action Items</span>
+</div>
+</div>
+<!-- Upload Card 2 -->
+<div class="bg-white p-6 rounded-2xl border border-outline-variant/10 hover:shadow-lg transition-all group">
+<div class="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center mb-4 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</div>
+<h4 class="font-bold text-on-surface truncate">Client Onboarding - Acme</h4>
+<p class="text-xs text-on-surface-variant mb-4">Processed yesterday</p>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold rounded uppercase tracking-wider">Interview</span>
+</div>
+</div>
+<!-- Upload Card 3 (Empty State Encouragement) -->
+<div class="border-2 border-dotted border-outline-variant/20 p-6 rounded-2xl flex flex-col items-center justify-center text-center opacity-60">
+<span class="material-symbols-outlined text-outline-variant mb-2" data-icon="add_circle">add_circle</span>
+<p class="text-xs font-medium text-on-surface-variant">Ready for more?</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer Shell -->
+<footer class="full-width border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+<div class="w-full px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto">
+<p class="font-inter text-xs uppercase tracking-widest text-slate-400">© 2024 Editorial Intelligence. All rights reserved.</p>
+<div class="flex gap-8">
+<a class="font-inter text-xs uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-opacity" href="#">Privacy Policy</a>
+<a class="font-inter text-xs uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-opacity" href="#">Terms of Service</a>
+<a class="font-inter text-xs uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-opacity" href="#">API Documentation</a>
+</div>
+</div>
+</footer>
+</main>
+<!-- Contextual FAB (Only visible on mobile/tablet) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center lg:hidden">
+<span class="material-symbols-outlined" data-icon="cloud_upload">cloud_upload</span>
+</button>
+</body></html>

@@ -21,15 +21,18 @@ export function TopNavBar({ title = "Curator AI" }: TopNavBarProps) {
     <header className="bg-white/80 backdrop-blur-md sticky top-0 z-40 shadow-sm border-b border-slate-100">
       <div className="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
         <div className="flex items-center gap-8">
-          <span className="text-xl font-bold tracking-tight text-slate-800 font-[var(--font-manrope)]">
-            {title}
-          </span>
           <nav className="hidden md:flex items-center gap-6 font-[var(--font-manrope)] text-sm font-medium">
             <Link
               href="/"
               className="text-slate-500 hover:text-slate-800 transition-colors"
             >
               Dashboard
+            </Link>
+            <Link
+              href="/upload"
+              className="text-slate-500 hover:text-slate-800 transition-colors"
+            >
+              Upload
             </Link>
             <Link
               href="/archive"

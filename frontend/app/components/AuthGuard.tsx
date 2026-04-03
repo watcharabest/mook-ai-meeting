@@ -31,11 +31,11 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 rounded-full flex items-center justify-center"
-               style={{ background: "linear-gradient(135deg, #446464, #385858)" }}>
+            style={{ background: "linear-gradient(135deg, #446464, #385858)" }}>
             <span className="material-symbols-outlined text-white animate-spin">progress_activity</span>
           </div>
           <p className="text-on-surface-variant text-sm font-medium tracking-widest uppercase"
-             style={{ fontFamily: "var(--font-manrope)" }}>
+            style={{ fontFamily: "var(--font-manrope)" }}>
             Loading...
           </p>
         </div>

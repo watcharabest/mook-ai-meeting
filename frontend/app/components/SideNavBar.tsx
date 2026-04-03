@@ -21,13 +21,13 @@ export function SideNavBar() {
   };
 
   return (
-    <aside className="h-screen w-64 fixed left-0 top-0 bg-slate-50 hidden lg:flex flex-col py-8 pl-4 pr-0 z-50 border-r border-slate-100">
+    <aside className="h-screen w-64 fixed left-0 top-0 bg-background hidden lg:flex flex-col py-8 pl-4 pr-0 z-50 border-r border-gray-200">
       <div className="mb-10 pl-4">
         <h1 className="text-lg font-black text-slate-900 font-[var(--font-manrope)] tracking-wide uppercase">
-          The Curator
+          Mook AI
         </h1>
         <p className="text-[10px] font-[var(--font-manrope)] tracking-widest text-slate-500 uppercase mt-1">
-          Editorial Intelligence
+          For summarize meeting
         </p>
       </div>
       <nav className="flex-1 space-y-2">
@@ -37,11 +37,10 @@ export function SideNavBar() {
             <Link
               key={item.label}
               href={item.path}
-              className={`flex items-center gap-3 py-3 px-4 transition-all duration-200 rounded-l-full ${
-                isActive
-                  ? "text-slate-900 font-semibold bg-white shadow-sm"
-                  : "text-slate-500 hover:text-slate-800 hover:translate-x-1"
-              }`}
+              className={`flex items-center gap-3 py-3 px-4 transition-all duration-200 rounded-l-full ${isActive
+                ? "text-slate-900 font-semibold bg-white shadow-sm"
+                : "text-slate-500 hover:text-slate-800 hover:translate-x-1"
+                }`}
             >
               <span
                 className="material-symbols-outlined"

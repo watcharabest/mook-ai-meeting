@@ -130,7 +130,7 @@ export default function DashboardPage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
             <div>
               <h2 className="text-4xl md:text-5xl font-extrabold font-[var(--font-manrope)] text-on-background tracking-tight mb-4">
-                {greeting}, Curator.
+                {greeting}, Mook.
               </h2>
               <p className="text-on-surface-variant text-lg max-w-xl">
                 {totalJobs > 0
