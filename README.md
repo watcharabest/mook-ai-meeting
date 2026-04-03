@@ -13,7 +13,7 @@ AI-powered meeting transcription and summarization platform. Upload audio record
            ▼                           ▼
 ┌──────────────────┐        ┌─────────────────────┐
 │  FastAPI Backend │        │  Supabase            │
-│  (Fly.io)        │        │  PostgreSQL + Auth   │
+│  (Railway)       │        │  PostgreSQL + Auth   │
 │  - JWT Auth      │        │  + Storage               │
 │  - Upload URL    │        │  + Realtime              │
 │  - Enqueue jobs  │        └──────────▲───────────┘
@@ -28,7 +28,7 @@ AI-powered meeting transcription and summarization platform. Upload audio record
        │ consume                       │
        ▼                               │
 ┌──────────────────────────────────────┴──────────────────┐
-│                  API Worker (Fly.io / local)             │
+│                  API Worker (Railway / local)             │
 │  1. Download audio ← Supabase Storage                   │
 │  2. Gladia API → transcript + speaker diarization       │
 │  3. Gemini 2.5 Flash API → summary + action items       │
@@ -47,7 +47,7 @@ AI-powered meeting transcription and summarization platform. Upload audio record
 | Gemini 2.5 Flash | 250 req/วัน | fallback → Flash-Lite (1,000 req/วัน) |
 | Supabase | 500MB DB / 1GB Storage | DB + Auth + Storage + Realtime ในที่เดียว |
 | Upstash Redis | 10,000 req/วัน | เพียงพอสำหรับ queue |
-| Fly.io | shared-cpu-1x 256MB ฟรี | backend + worker รันบน instance เดียวกันได้ |
+| Railway | $5 free credit/เดือน | backend + worker แยก service, ไม่ sleep |
 | Vercel | ฟรี (hobby) | frontend |
 
 **รวมค่าใช้จ่าย: $0/เดือน** สำหรับ ≤20 meetings/วัน
@@ -57,8 +57,8 @@ AI-powered meeting transcription and summarization platform. Upload audio record
 ```
 sum_meeting/
 ├── frontend/          # Next.js 14 (App Router) — deploy on Vercel
-├── backend/           # FastAPI — deploy on Fly.io
-├── worker/            # Celery Worker — deploy on Fly.io (ไม่ต้องใช้ GPU)
+├── backend/           # FastAPI — deploy on Railway (backend/railway.toml)
+├── worker/            # Celery Worker — deploy on Railway (worker/railway.toml)
 ├── supabase/          # SQL migrations and schema
 │   ├── schema.sql
 │   └── seed.sql
@@ -70,7 +70,7 @@ sum_meeting/
 - Node.js 18+ (frontend)
 - Python 3.11+ (backend + worker)
 - ~~CUDA 12.1+ GPU~~ ไม่จำเป็นแล้ว
-- Accounts: Supabase, Upstash Redis, Fly.io, Google AI Studio, Gladia
+- Accounts: Supabase, Upstash Redis, Railway, Google AI Studio, Gladia
 
 ## Quick Start
 
@@ -116,33 +116,47 @@ cp .env.example .env
 uvicorn app.main:app --reload
 ```
 
-#### Deploy to Fly.io
-```bash
-cd backend
-fly auth login
-fly launch --name curator-ai-backend
-fly secrets set SUPABASE_URL=... SUPABASE_SERVICE_KEY=... # (all env vars)
-fly deploy
+#### Deploy to Railway
+
+1. Push code ขึ้น GitHub
+2. ไปที่ [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub repo**
+3. เลือก repo → Railway จะเจอ `railway.toml` อัตโนมัติ
+
+**สร้าง Backend service:**
+```
+Railway Dashboard → New Service → GitHub Repo
+  Root Directory: backend          ← สำคัญมาก!
+  (Railway จะใช้ backend/Dockerfile และ backend/railway.toml)
+```
+
+**Environment Variables (Backend):**
+```
+SUPABASE_URL
+SUPABASE_SERVICE_KEY
+SUPABASE_JWT_SECRET
+SUPABASE_STORAGE_BUCKET=audio-files
+REDIS_URL
+FRONTEND_URL=https://your-frontend.vercel.app
 ```
 
 ### 7. Worker (Celery — ไม่ต้องใช้ GPU)
-```bash
-cd worker
-cp .env.example .env
-# Fill in .env
-# Build and push Docker image (ใช้ python base image ธรรมดา ไม่ต้อง CUDA)
-docker build -t your-registry/curator-worker:latest .
-docker push your-registry/curator-worker:latest
+
+**สร้าง Worker service (ใน Project เดียวกับ Backend):**
+```
+Railway Dashboard → New Service (in same project) → GitHub Repo
+  Root Directory: worker           ← สำคัญมาก!
+  (Railway จะใช้ worker/Dockerfile และ worker/railway.toml)
 ```
 
-#### Deploy Worker to Fly.io
-```bash
-cd worker
-fly launch --name curator-ai-worker
-fly secrets set GLADIA_API_KEY=... GEMINI_API_KEY=... # (all env vars)
-fly deploy
+**Environment Variables (Worker):**
 ```
-> Worker รัน: `celery -A app.celery_app worker --loglevel=info -Q transcription --concurrency=2`
+SUPABASE_URL
+SUPABASE_SERVICE_KEY
+SUPABASE_STORAGE_BUCKET=audio-files
+REDIS_URL
+GLADIA_API_KEY
+GEMINI_API_KEY
+```
 
 ## Environment Variables Summary
 
@@ -150,7 +164,7 @@ fly deploy
 |---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | Frontend | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Frontend | Supabase anon key |
-| `NEXT_PUBLIC_API_URL` | Frontend | FastAPI URL on Fly.io |
+| `NEXT_PUBLIC_API_URL` | Frontend | FastAPI URL on Railway |
 | `SUPABASE_URL` | Backend + Worker | Supabase project URL |
 | `SUPABASE_SERVICE_KEY` | Backend + Worker | Service role key (bypasses RLS) |
 | `SUPABASE_JWT_SECRET` | Backend | For verifying user JWTs |

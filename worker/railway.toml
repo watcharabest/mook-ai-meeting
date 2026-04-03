@@ -1,0 +1,8 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# No healthcheck — worker ไม่มี HTTP endpoint
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3

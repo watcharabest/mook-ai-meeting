@@ -9,5 +9,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application
 COPY . .
 
-# Run Celery worker
+# Run Celery worker (no HTTP port needed — Render "worker" type)
 CMD ["celery", "-A", "app.celery_app", "worker", "--loglevel=info", "-Q", "transcription", "--concurrency=2"]
