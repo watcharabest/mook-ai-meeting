@@ -6,7 +6,6 @@ import { TopNavBar } from "@/app/components/TopNavBar";
 import { Footer } from "@/app/components/Footer";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { createJob, startJob } from "@/app/lib/api";
-import { supabase } from "@/app/lib/supabase";
 
 const ACCEPTED_TYPES = [
   "audio/mpeg",
@@ -96,23 +95,30 @@ export default function UploadPage() {
         token
       );
 
-      // Step 2: Upload directly to Supabase Storage using SDK
+      // Step 2: Upload directly to Supabase Storage via signed URL
       setUploadStep("Uploading audio...");
       setUploadProgress(30);
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("audio-files")
-        .uploadToSignedUrl(
-          jobResponse.storage_path,
-          jobResponse.upload_token,
-          file,
-          {
-            upsert: true,
-          }
-        );
+      const uploadRes = await fetch(jobResponse.upload_url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": contentType,
+        },
+        body: file,
+      });
 
-      if (uploadError) {
-        throw new Error(`Upload failed: ${uploadError.message}`);
+      if (!uploadRes.ok) {
+        const errText = await uploadRes.text();
+        console.error("Supabase Upload Error:", uploadRes.status, errText);
+        let errMsg = uploadRes.statusText;
+        try {
+          const parsed = JSON.parse(errText);
+          if (parsed.message) errMsg = parsed.message;
+          if (parsed.error) errMsg = parsed.error;
+        } catch (e) {
+            // Unparseable error text
+        }
+        throw new Error(`Upload rejected (HTTP ${uploadRes.status}): ${errMsg}`);
       }
 
       setUploadProgress(80);
