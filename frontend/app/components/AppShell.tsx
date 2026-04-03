@@ -13,20 +13,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthProvider>
-      {/* <AuthGuard> */}
-      {isAuthPage ? (
-        /* Auth pages get full-screen layout — no sidebar */
-        <>{children}</>
-      ) : (
-        /* App pages get sidebar layout */
-        <div className="min-h-screen bg-background">
-          <SideNavBar />
-          <div className="lg:ml-64 min-h-screen flex flex-col">
-            {children}
+      <AuthGuard>
+        {isAuthPage ? (
+          /* Auth pages get full-screen layout — no sidebar */
+          <>{children}</>
+        ) : (
+          /* App pages get sidebar layout */
+          <div className="min-h-screen bg-background">
+            <SideNavBar />
+            <div className="lg:ml-64 min-h-screen flex flex-col">
+              {children}
+            </div>
           </div>
-        </div>
-      )}
-      {/* </AuthGuard> */}
+        )}
+      </AuthGuard>
     </AuthProvider>
   );
 }

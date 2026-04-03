@@ -97,8 +97,13 @@ export default function DashboardPage() {
       const data = await listJobs(token);
       setJobs(data.jobs);
       setTotalJobs(data.total);
+      setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch jobs");
+      if (err instanceof TypeError && err.message === "Failed to fetch") {
+        setError("Cannot connect to the server. This may be a CORS or network issue.");
+      } else {
+        setError(err instanceof Error ? err.message : "Failed to fetch jobs");
+      }
     } finally {
       setLoading(false);
     }
@@ -224,6 +229,13 @@ export default function DashboardPage() {
               <p className="text-on-surface-variant text-sm mt-1">
                 Make sure the backend server is running at {process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}
               </p>
+              <button
+                onClick={() => { setLoading(true); setError(null); fetchJobs(); }}
+                className="mt-4 bg-primary text-white px-5 py-2 rounded-xl font-semibold inline-flex items-center gap-2 hover:brightness-110 transition-all cursor-pointer text-sm"
+              >
+                <span className="material-symbols-outlined text-sm">refresh</span>
+                Retry
+              </button>
             </div>
           ) : jobs.length === 0 ? (
             <div className="bg-surface-container-low rounded-xl p-12 text-center">
