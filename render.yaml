@@ -1,0 +1,47 @@
+services:
+  # ─── Backend (FastAPI) ───────────────────────────────────────────────────────
+  - type: web
+    name: mook-ai-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: singapore
+    branch: main
+    healthCheckPath: /health
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: audio-files
+      - key: REDIS_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+
+  # ─── Worker (Celery) ─────────────────────────────────────────────────────────
+  - type: worker
+    name: mook-ai-worker
+    runtime: docker
+    dockerfilePath: ./worker/Dockerfile
+    dockerContext: ./worker
+    plan: free
+    region: singapore
+    branch: main
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: audio-files
+      - key: REDIS_URL
+        sync: false
+      - key: GLADIA_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

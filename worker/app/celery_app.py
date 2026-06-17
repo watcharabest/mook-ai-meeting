@@ -1,5 +1,6 @@
 """Celery app definition for the worker process."""
 
+import ssl
 from celery import Celery
 from app.config import get_settings
 
@@ -25,6 +26,6 @@ celery_app.conf.update(
     task_time_limit=1800,       # 30 min max per task
     task_soft_time_limit=1500,  # 25 min soft limit
     # Upstash Redis TLS
-    broker_use_ssl={"ssl_cert_reqs": "CERT_NONE"} if settings.redis_url.startswith("rediss://") else None,
-    redis_backend_use_ssl={"ssl_cert_reqs": "CERT_NONE"} if settings.redis_url.startswith("rediss://") else None,
+    broker_use_ssl={"ssl_cert_reqs": ssl.CERT_NONE} if settings.redis_url.startswith("rediss://") else None,
+    redis_backend_use_ssl={"ssl_cert_reqs": ssl.CERT_NONE} if settings.redis_url.startswith("rediss://") else None,
 )

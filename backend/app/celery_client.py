@@ -1,5 +1,6 @@
 """Celery app configuration (client-side — for enqueuing tasks)."""
 
+import ssl
 from celery import Celery
 from app.config import get_settings
 
@@ -19,8 +20,8 @@ def get_celery_app() -> Celery:
         enable_utc=True,
         broker_connection_retry_on_startup=True,
         # Upstash Redis TLS
-        broker_use_ssl={"ssl_cert_reqs": "CERT_NONE"} if settings.redis_url.startswith("rediss://") else None,
-        redis_backend_use_ssl={"ssl_cert_reqs": "CERT_NONE"} if settings.redis_url.startswith("rediss://") else None,
+        broker_use_ssl={"ssl_cert_reqs": ssl.CERT_NONE} if settings.redis_url.startswith("rediss://") else None,
+        redis_backend_use_ssl={"ssl_cert_reqs": ssl.CERT_NONE} if settings.redis_url.startswith("rediss://") else None,
     )
     return celery_app
 
